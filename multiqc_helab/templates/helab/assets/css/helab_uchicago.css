@@ -135,6 +135,7 @@ kbd {
   font-size: 1em;
   font-weight: bolder;
   color: #800000;
+  opacity: 0.5;
 }
 .side-nav .mqc-nav li {
   position: relative;

@@ -28,6 +28,7 @@ setup(
             "config_loaded = multiqc_helab.multiqc_helab:update_config",
         ],
         "multiqc.modules.v1": [
+            "fastq_screen_fork = multiqc_helab.modules.fastq_screen_fork.fastq_screen_fork:MultiqcModule",
             "sampletracking = multiqc_helab.modules.sampletracking.sampletracking:MultiqcModule",
             "picard_demultiplex = multiqc_helab.modules.picard_demultiplex.demultiplex:MultiqcModule",
         ],

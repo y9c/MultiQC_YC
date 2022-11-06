@@ -1,4 +1,4 @@
-""" MultiQC submodule to parse output from Picard CrosscheckFingerprints """
+"""MultiQC submodule to parse output from Picard CrosscheckFingerprints."""
 
 import logging
 import re
@@ -44,9 +44,7 @@ class MultiqcModule(BaseMultiqcModule):
             log.info(f"Found {report_count} Sampletracking reports")
 
     def parse_reports(self):
-        """
-        Find Picard CrosscheckFingerprints reports and parse their data.
-        """
+        """Find Picard CrosscheckFingerprints reports and parse their data."""
 
         self.picard_CrosscheckFingerprints_df = None
         report_dfs = []
@@ -127,8 +125,9 @@ class MultiqcModule(BaseMultiqcModule):
 
     def _take_till(self, iterator, fn):
         """Take from an iterator till `fn` returns false.
-    
-        Returns the iterator with the value that caused false at the front, and all the lines skipped till then as a list.
+
+        Returns the iterator with the value that caused false at the
+        front, and all the lines skipped till then as a list.
         """
         headers = []
         try:
@@ -142,7 +141,8 @@ class MultiqcModule(BaseMultiqcModule):
         return (chain([val], iterator), headers)
 
     def _parse_cli(self, line):
-        """Parse the Picard CLI invocation that is stored in the header section of the file."""
+        """Parse the Picard CLI invocation that is stored in the header section
+        of the file."""
         tumor_awareness_regex = r"CALCULATE_TUMOR_AWARE_RESULTS(\s|=)(\w+)"
         lod_threshold_regex = r"LOD_THRESHOLD(\s|=)(\S+)"
 
@@ -160,7 +160,7 @@ class MultiqcModule(BaseMultiqcModule):
         return (tumor_awareness, lod_threshold)
 
     def _get_table_headers(self, data):
-        """Create the headers config"""
+        """Create the headers config."""
 
         crosscheckfingerprints_table_cols = [
             "RESULT",
