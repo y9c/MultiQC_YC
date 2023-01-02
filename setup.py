@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""MultiQC_HeLab is a plugin for MultiQC containing customized modules and
+"""MultiQC_YC is a plugin for MultiQC containing customized modules and
 templates."""
 
 import site
@@ -11,29 +11,26 @@ version = "0.0.1"
 site.ENABLE_USER_SITE = "--user" in sys.argv[1:]
 
 setup(
-    name="multiqc_helab",
+    name="multiqc_yc",
     version=version,
-    author="Matthias De Smet",
-    author_email="11850640+matthdsm@users.noreply.github.com",
-    description="MultiQC plugin for interal use at helab",
+    author="Chang Ye",
+    description="MultiQC plugin for interal use at yc",
     long_description=__doc__,
     keywords="bioinformatics",
-    url="https://github.com/CenterForMedicalGeneticsGhent/MultiQC_helab",
+    url="https://github.com/y9c/MultiQC_yc",
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
     install_requires=["multiqc>=1.10", "pandas"],
     entry_points={
         "multiqc.hooks.v1": [
-            "config_loaded = multiqc_helab.multiqc_helab:update_config",
+            "config_loaded = multiqc_yc.multiqc_yc:update_config",
         ],
         "multiqc.modules.v1": [
-            "fastq_screen_fork = multiqc_helab.modules.fastq_screen_fork.fastq_screen_fork:MultiqcModule",
-            "sampletracking = multiqc_helab.modules.sampletracking.sampletracking:MultiqcModule",
-            "picard_demultiplex = multiqc_helab.modules.picard_demultiplex.demultiplex:MultiqcModule",
+            "readsStats = multiqc_yc.modules.readsStats.readsStats:MultiqcModule",
         ],
         "multiqc.templates.v1": [
-            "helab = multiqc_helab.templates.helab",
+            "yc = multiqc_yc.templates.yc",
         ],
     },
     classifiers=[
