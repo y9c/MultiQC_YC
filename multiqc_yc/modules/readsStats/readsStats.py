@@ -67,7 +67,7 @@ class MultiqcModule(BaseMultiqcModule):
             d["mapping_to_genes_sequences"] = (
                 c["before_genes"] - c["after_genes"]
             )
-            d["unique_to_genes_sequences"] = c["after_dedup_genes"]
+            d["dedup_to_genes_sequences"] = c["after_dedup_genes"]
             d["duplicate_to_genes_sequences"] = (
                 d["mapping_to_genes_sequences"] - c["after_dedup_genes"]
             )
@@ -77,15 +77,15 @@ class MultiqcModule(BaseMultiqcModule):
             )
             d["usable_to_genes_sequence"] = c["after_dedup_genes"]
             d["mapping_to_genes_percentage"] = (
-                d["mapping_to_genes_sequences"] / d["total_sequences"]
+                d["mapping_to_genes_sequences"] / c["after_trimming"]
             )
             d["mapping_to_genome_sequences"] = (
                 c["before_genome"] - c["after_genome"]
             )
             d["mapping_to_genome_percentage"] = (
-                d["mapping_to_genome_sequences"] / d["total_sequences"]
+                d["mapping_to_genome_sequences"] / c["after_trimming"]
             )
-            d["unique_to_genome_sequences"] = c["after_dedup_genome"]
+            d["dedup_to_genome_sequences"] = c["after_dedup_genome"]
             d["duplicate_to_genome_sequences"] = (
                 d["mapping_to_genome_sequences"] - c["after_dedup_genome"]
             )
@@ -105,6 +105,10 @@ class MultiqcModule(BaseMultiqcModule):
         self.add_section(
             name="Reads Statistics (barplot)",
             anchor="Reads Statistics",
+            description="""
+            This plot shows the number of reads after each step. For this customized pipeline only, this is not a general purpose module.
+            You can chose click the figure legend to show or hide some kinds of reads. For example, if you only select `duplicate to genome` and `dedup to genome`, you can have the duplication ratio stats.
+            """,
             plot=self.readstats_simple_plot(),
         )
         # Add to the general statistics table
@@ -198,12 +202,12 @@ class MultiqcModule(BaseMultiqcModule):
                 "name": "duplicate to genome",
                 "color": "darkgreen",
             },
-            "unique_to_genes_sequences": {
-                "name": "unique to genes",
+            "dedup_to_genes_sequences": {
+                "name": "dedup to genes",
                 "color": "skyblue",
             },
-            "unique_to_genome_sequences": {
-                "name": "unique to genome",
+            "dedup_to_genome_sequences": {
+                "name": "dedup to genome",
                 "color": "lightgreen",
             },
         }
