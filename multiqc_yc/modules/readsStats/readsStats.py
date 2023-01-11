@@ -75,7 +75,9 @@ class MultiqcModule(BaseMultiqcModule):
                 d["duplicate_to_genes_sequences"]
                 / d["mapping_to_genes_sequences"]
             )
-            d["usable_to_genes_sequence"] = c["after_dedup_genes"]
+            d["dedup_to_genes_percentage"] = (
+                d["dedup_to_genes_sequences"] / d["mapping_to_genes_sequences"]
+            )
             d["mapping_to_genes_percentage"] = (
                 d["mapping_to_genes_sequences"] / c["after_trimming"]
             )
@@ -93,7 +95,10 @@ class MultiqcModule(BaseMultiqcModule):
                 d["duplicate_to_genome_sequences"]
                 / d["mapping_to_genome_sequences"]
             )
-            d["usable_to_genome_sequence"] = c["after_dedup_genome"]
+            d["dedup_to_genome_percentage"] = (
+                d["dedup_to_genome_sequences"]
+                / d["mapping_to_genome_sequences"]
+            )
             d["unmapped_sequence"] = (
                 c["after_trimming"]
                 - d["mapping_to_genome_sequences"]
@@ -181,11 +186,6 @@ class MultiqcModule(BaseMultiqcModule):
         }
 
         cats = {
-            # "total_sequences": {"name": "# total Sequences"},
-            # "usable_to_genes_sequence": {"name": "# usable reads for genes"},
-            # "usable_to_genome_sequence": {"name": "# usable reads for genome"},
-            # "mapping_to_genes_sequences": {"name": "# mapping to genes"},
-            # "mapping_to_genome_sequences": {"name": "# mapping to genome"},
             "trimming_discarded_sequences": {
                 "name": "trimming discarded",
                 "color": "red",
@@ -241,7 +241,16 @@ class MultiqcModule(BaseMultiqcModule):
             "title": "% trimming discarded",
             "description": "Percentage of discarded reads in trimming step (include adapter dimer, low QC, etc.)",
             "min": 0,
+            "max": 1,
             "scale": "Reds",
+            "format": "{:.2%}",
+        }
+        headers["mapping_to_genes_percentage"] = {
+            "title": "% mapping to genes",
+            "description": "Percentage of reads that aligned into genes reference in mapping step",
+            "min": 0,
+            "max": 1,
+            "scale": "Blues",
             "format": "{:.2%}",
         }
         headers["mapping_to_genes_sequences"] = {
@@ -252,34 +261,29 @@ class MultiqcModule(BaseMultiqcModule):
             "format": "{:,.0f}",
             "hidden": True,
         }
-        headers["mapping_to_genes_percentage"] = {
-            "title": "% mapping to genes",
-            "description": "Percentage of reads that aligned into genes reference in mapping step",
+        headers["dedup_to_genes_percentage"] = {
+            "title": "% dedup to genes",
+            "description": "Percentage of reads after duplicate removal step vs. total reads that aligned into genes reference",
             "min": 0,
+            "max": 1,
             "scale": "Blues",
             "format": "{:.2%}",
         }
-        headers["duplicate_to_genes_sequences"] = {
-            "title": "# duplicate to genes",
-            "description": "Number of reads that aligned into genes reference after duplicate removal step",
-            "min": 0,
-            "scale": "Blues",
-            "format": "{:,.0f}",
-            "hidden": True,
-        }
-        headers["duplicate_to_genes_percentage"] = {
-            "title": "% duplicate to genes",
-            "description": "Percentage of reads that aligned into genes reference after duplicate removal step",
-            "min": 0,
-            "scale": "Blues",
-            "format": "{:.2%}",
-        }
-        headers["usable_to_genes_sequence"] = {
+        headers["dedup_to_genes_sequences"] = {
             "title": "# usable reads for genes",
             "description": "Number of usable reads for detect modification in genes",
             "min": 0,
             "scale": "Blues",
             "format": "{:,.0f}",
+        }
+        headers["mapping_to_genome_percentage"] = {
+            "title": "% mapping to genome",
+            "description": "Percentage of reads that aligned into genome reference in mapping step",
+            "min": 0,
+            "max": 1,
+            "scale": "Greens",
+            "format": "{:.2%}",
+            # "hidden": True,
         }
         headers["mapping_to_genome_sequences"] = {
             "title": "# mapping to genome",
@@ -289,30 +293,15 @@ class MultiqcModule(BaseMultiqcModule):
             "format": "{:,.0f}",
             "hidden": True,
         }
-        headers["mapping_to_genome_percentage"] = {
-            "title": "% mapping to genome",
-            "description": "Percentage of reads that aligned into genome reference in mapping step",
+        headers["dedup_to_genome_percentage"] = {
+            "title": "% dedup to genome",
+            "description": "Percentage of reads after duplicate removal step vs. total reads that aligned into genome reference",
             "min": 0,
-            "scale": "Greens",
-            "format": "{:.2%}",
-            # "hidden": True,
-        }
-        headers["duplicate_to_genome_sequences"] = {
-            "title": "# duplicate to genome",
-            "description": "Number of reads that aligned into genome reference after duplicate removal step",
-            "min": 0,
-            "scale": "Greens",
-            "format": "{:,.0f}",
-            "hidden": True,
-        }
-        headers["duplicate_to_genome_percentage"] = {
-            "title": "% duplicate to genome",
-            "description": "Percentage of reads that aligned into genome reference after duplicate removal step",
-            "min": 0,
+            "max": 1,
             "scale": "Greens",
             "format": "{:.2%}",
         }
-        headers["usable_to_genome_sequence"] = {
+        headers["dedup_to_genome_sequences"] = {
             "title": "# usable reads for genome",
             "description": "Number of usable reads for detect modification in genome",
             "min": 0,
