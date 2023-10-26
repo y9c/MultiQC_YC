@@ -15,7 +15,6 @@ log = logging.getLogger(__name__)
 
 class MultiqcModule(BaseMultiqcModule):
     def __init__(self):
-
         # Initialise the parent object
         super(MultiqcModule, self).__init__(
             name="Reads Stats",
@@ -38,7 +37,13 @@ class MultiqcModule(BaseMultiqcModule):
             self.reads_data[n] += Counter(self.parse_bowtie2(f))
             self.add_data_source(f)
         for f in self.find_log_files("readsStats/star", filehandles=True):
-            n, _ = f["s_name"].removesuffix("_genome").rsplit("_run", 1)
+            # edited for new version
+            n, _ = (
+                f["s_name"]
+                .removesuffix("_genome")
+                .removesuffix("_contamination")
+                .rsplit("_run", 1)
+            )
             self.reads_data[n] += Counter(self.parse_star(f))
             self.add_data_source(f)
         for f in self.find_log_files("readsStats/dedup", filehandles=True):
@@ -137,11 +142,13 @@ class MultiqcModule(BaseMultiqcModule):
         """Parse bowtie2 data."""
         parsed_data = dict()
         n_mapped = 0
+        # edited for new version
         for l in f["f"]:
-            if "reads; of these:" in l:
-                parsed_data["before_genes"] = int(l.split(" ")[0])
-            elif " aligned exactly 1 time" in l or " aligned >1 times" in l:
-                n_mapped += int(l.split("(")[0])
+            num, *_, name = l.strip("\n").split("\t")
+            if "total (QC-passed reads + QC-failed reads)" in name:
+                parsed_data["before_genes"] = int(num)
+            elif name == "primary mapped":
+                n_mapped = int(num)
         parsed_data["after_genes"] = parsed_data["before_genes"] - n_mapped
         return parsed_data
 
@@ -215,8 +222,8 @@ class MultiqcModule(BaseMultiqcModule):
         return bargraph.plot(data, cats, pconfig)
 
     def fastqc_general_stats(self):
-        """Add some single-number stats to the basic statistics
-        table at the top of the report"""
+        """Add some single-number stats to the basic statistics table at the
+        top of the report."""
 
         # Prep the data
         data = self.computed_data

@@ -62,7 +62,8 @@ def update_search_patterns() -> None:
                     "shared": False,
                 },
                 "readsStats/bowtie2": {
-                    "contents": "reads; of these:",
+                    #"contents": "reads; of these:",
+                    "contents_re": "(.*total \(QC-passed reads \+ QC-failed reads\).*)|(.*reads; of these:.*)",
                     "fn": "*_genes.report",
                     "num_lines": 1,
                     "shared": False,
@@ -74,6 +75,7 @@ def update_search_patterns() -> None:
                 },
                 "readsStats/dedup": {
                     "contents": "total (QC-passed reads + QC-failed reads)",
+                    "fn": "*_dedup.report",
                     "num_lines": 1,
                     "shared": False,
                 },
