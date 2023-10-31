@@ -15,7 +15,6 @@ log = logging.getLogger(__name__)
 
 class MultiqcModule(BaseMultiqcModule):
     def __init__(self):
-
         # Initialise the parent object
         super(MultiqcModule, self).__init__(
             name="Reads Stats",
@@ -64,8 +63,8 @@ class MultiqcModule(BaseMultiqcModule):
             d["trimming_discarded_percentage"] = (
                 d["trimming_discarded_sequences"] / d["total_sequences"]
             )
-            d["mapping_to_genes_sequences"] = (
-                c["before_genes"] - c["after_genes"]
+            d["mapping_to_genes_sequences"] = max(
+                c["before_genes"] - c["after_genes"], 1
             )
             d["dedup_to_genes_sequences"] = c["after_dedup_genes"]
             d["duplicate_to_genes_sequences"] = (
@@ -81,8 +80,8 @@ class MultiqcModule(BaseMultiqcModule):
             d["mapping_to_genes_percentage"] = (
                 d["mapping_to_genes_sequences"] / c["after_trimming"]
             )
-            d["mapping_to_genome_sequences"] = (
-                c["before_genome"] - c["after_genome"]
+            d["mapping_to_genome_sequences"] = max(
+                c["before_genome"] - c["after_genome"], 1
             )
             d["mapping_to_genome_percentage"] = (
                 d["mapping_to_genome_sequences"] / c["after_trimming"]
@@ -215,8 +214,8 @@ class MultiqcModule(BaseMultiqcModule):
         return bargraph.plot(data, cats, pconfig)
 
     def fastqc_general_stats(self):
-        """Add some single-number stats to the basic statistics
-        table at the top of the report"""
+        """Add some single-number stats to the basic statistics table at the
+        top of the report."""
 
         # Prep the data
         data = self.computed_data
