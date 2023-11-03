@@ -128,7 +128,10 @@ class MultiqcModule(BaseMultiqcModule):
         """Parse cutadapt data."""
         parsed_data = dict()
         for l in f["f"]:
-            if "Total reads processed:" in l or "Total pairs processed:" in l:
+            if (
+                "Total reads processed:" in l
+                or "Total read pairs processed:" in l
+            ):
                 parsed_data["before_trimming"] = int(
                     l.split(" ")[-1].replace(",", "")
                 )
