@@ -5,7 +5,7 @@
 import logging
 from collections import Counter, OrderedDict, defaultdict
 
-from multiqc.modules.base_module import BaseMultiqcModule
+from multiqc.base_module import BaseMultiqcModule
 from multiqc.plots import bargraph
 
 # Initialise the logger
