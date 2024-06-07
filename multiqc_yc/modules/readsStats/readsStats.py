@@ -122,6 +122,7 @@ class MultiqcModule(BaseMultiqcModule):
         import json
 
         d = json.load(f["f"])
+        print(d)
         parsed_data["before_trimming"] = d["read_counts"]["input"]
         parsed_data["after_trimming"] = d["read_counts"]["output"]
         return parsed_data

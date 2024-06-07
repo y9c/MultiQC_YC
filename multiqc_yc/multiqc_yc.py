@@ -11,9 +11,7 @@ log = logging.getLogger("multiqc")
 # Save this plugin's version number (defined in setup.py) to the MultiQC config
 config.multiqc_yc_version = get_distribution("multiqc_yc").version
 log.info(
-    "Running MultiQC (Chang Y forked) Plugin v{}".format(
-        config.multiqc_yc_version
-    )
+    "Running MultiQC (Chang Y forked) Plugin v{}".format(config.multiqc_yc_version)
 )
 
 
@@ -57,12 +55,12 @@ def update_search_patterns() -> None:
             config.sp,
             {
                 "readsStats/cutadapt": {
-                    "contents": "This is cutadapt",
-                    "num_lines": 1,
+                    "contents": '  "tag": "Cutadapt report",',
+                    "num_lines": 3,
                     "shared": False,
                 },
                 "readsStats/bowtie2": {
-                    #"contents": "reads; of these:",
+                    # "contents": "reads; of these:",
                     "contents_re": "(.*total \(QC-passed reads \+ QC-failed reads\).*)|(.*reads; of these:.*)",
                     "fn": "*_genes.report",
                     "num_lines": 1,
