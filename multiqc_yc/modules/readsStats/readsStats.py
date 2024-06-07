@@ -2,7 +2,6 @@
 
 """MultiQC module to parse output from Reads Statistics."""
 
-
 import logging
 from collections import Counter, OrderedDict, defaultdict
 
@@ -69,16 +68,13 @@ class MultiqcModule(BaseMultiqcModule):
             d["trimming_discarded_percentage"] = (
                 d["trimming_discarded_sequences"] / d["total_sequences"]
             )
-            d["mapping_to_genes_sequences"] = (
-                c["before_genes"] - c["after_genes"]
-            )
+            d["mapping_to_genes_sequences"] = c["before_genes"] - c["after_genes"]
             d["dedup_to_genes_sequences"] = c["after_dedup_genes"]
             d["duplicate_to_genes_sequences"] = (
                 d["mapping_to_genes_sequences"] - c["after_dedup_genes"]
             )
             d["duplicate_to_genes_percentage"] = (
-                d["duplicate_to_genes_sequences"]
-                / d["mapping_to_genes_sequences"]
+                d["duplicate_to_genes_sequences"] / d["mapping_to_genes_sequences"]
             )
             d["dedup_to_genes_percentage"] = (
                 d["dedup_to_genes_sequences"] / d["mapping_to_genes_sequences"]
@@ -86,9 +82,7 @@ class MultiqcModule(BaseMultiqcModule):
             d["mapping_to_genes_percentage"] = (
                 d["mapping_to_genes_sequences"] / c["after_trimming"]
             )
-            d["mapping_to_genome_sequences"] = (
-                c["before_genome"] - c["after_genome"]
-            )
+            d["mapping_to_genome_sequences"] = c["before_genome"] - c["after_genome"]
             d["mapping_to_genome_percentage"] = (
                 d["mapping_to_genome_sequences"] / c["after_trimming"]
             )
@@ -97,12 +91,10 @@ class MultiqcModule(BaseMultiqcModule):
                 d["mapping_to_genome_sequences"] - c["after_dedup_genome"]
             )
             d["duplicate_to_genome_percentage"] = (
-                d["duplicate_to_genome_sequences"]
-                / d["mapping_to_genome_sequences"]
+                d["duplicate_to_genome_sequences"] / d["mapping_to_genome_sequences"]
             )
             d["dedup_to_genome_percentage"] = (
-                d["dedup_to_genome_sequences"]
-                / d["mapping_to_genome_sequences"]
+                d["dedup_to_genome_sequences"] / d["mapping_to_genome_sequences"]
             )
             d["unmapped_sequence"] = (
                 c["after_trimming"]
@@ -127,18 +119,11 @@ class MultiqcModule(BaseMultiqcModule):
     def parse_cutadapt(self, f):
         """Parse cutadapt data."""
         parsed_data = dict()
-        for l in f["f"]:
-            if (
-                "Total reads processed:" in l
-                or "Total read pairs processed:" in l
-            ):
-                parsed_data["before_trimming"] = int(
-                    l.split(" ")[-1].replace(",", "")
-                )
-            elif "written (passing filters):" in l:
-                parsed_data["after_trimming"] = int(
-                    l.split(":")[-1].split("(")[0].replace(",", "")
-                )
+        import json
+
+        d = json.load(f["f"])
+        parsed_data["before_trimming"] = d["read_counts"]["input"]
+        parsed_data["after_trimming"] = d["read_counts"]["output"]
         return parsed_data
 
     def parse_bowtie2(self, f):
@@ -146,8 +131,8 @@ class MultiqcModule(BaseMultiqcModule):
         parsed_data = dict()
         n_mapped = 0
         # edited for new version
-        for l in f["f"]:
-            num, *_, name = l.strip("\n").split("\t")
+        for line in f["f"]:
+            num, *_, name = line.strip("\n").split("\t")
             if "total (QC-passed reads + QC-failed reads)" in name:
                 parsed_data["before_genes"] = int(num)
             elif name == "primary mapped":
@@ -159,24 +144,24 @@ class MultiqcModule(BaseMultiqcModule):
         """Parse STAR data."""
         parsed_data = dict()
         n_mapped = 0
-        for l in f["f"]:
-            if "Number of input reads |" in l:
-                parsed_data["before_genome"] = int(l.split("|")[-1])
+        for line in f["f"]:
+            if "Number of input reads |" in line:
+                parsed_data["before_genome"] = int(line.split("|")[-1])
             elif (
-                "Uniquely mapped reads number |" in l
-                or "Number of reads mapped to multiple loci |" in l
-                or "Number of chimeric reads |" in l
+                "Uniquely mapped reads number |" in line
+                or "Number of reads mapped to multiple loci |" in line
+                or "Number of chimeric reads |" in line
             ):
-                n_mapped += int(l.split("|")[-1])
+                n_mapped += int(line.split("|")[-1])
         parsed_data["after_genome"] = parsed_data["before_genome"] - n_mapped
         return parsed_data
 
     def parse_dedup(self, f):
         """Parse dedup data."""
         parsed_data = dict()
-        for l in f["f"]:
-            if l.strip().split("\t")[-1] == "primary":
-                parsed_data["after_dedup"] = int(l.split("\t")[0])
+        for line in f["f"]:
+            if line.strip().split("\t")[-1] == "primary":
+                parsed_data["after_dedup"] = int(line.split("\t")[0])
         return parsed_data
 
     def readstats_simple_plot(self):
