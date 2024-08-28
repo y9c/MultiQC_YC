@@ -2,7 +2,7 @@
 
 """MultiQC module to parse output from Reads Statistics."""
 
-
+import json
 import logging
 from collections import Counter, OrderedDict, defaultdict
 
@@ -71,8 +71,7 @@ class MultiqcModule(BaseMultiqcModule):
                 d["mapping_to_genes_sequences"] - c["after_dedup_genes"]
             )
             d["duplicate_to_genes_percentage"] = (
-                d["duplicate_to_genes_sequences"]
-                / d["mapping_to_genes_sequences"]
+                d["duplicate_to_genes_sequences"] / d["mapping_to_genes_sequences"]
             )
             d["dedup_to_genes_percentage"] = (
                 d["dedup_to_genes_sequences"] / d["mapping_to_genes_sequences"]
@@ -91,12 +90,10 @@ class MultiqcModule(BaseMultiqcModule):
                 d["mapping_to_genome_sequences"] - c["after_dedup_genome"]
             )
             d["duplicate_to_genome_percentage"] = (
-                d["duplicate_to_genome_sequences"]
-                / d["mapping_to_genome_sequences"]
+                d["duplicate_to_genome_sequences"] / d["mapping_to_genome_sequences"]
             )
             d["dedup_to_genome_percentage"] = (
-                d["dedup_to_genome_sequences"]
-                / d["mapping_to_genome_sequences"]
+                d["dedup_to_genome_sequences"] / d["mapping_to_genome_sequences"]
             )
             d["unmapped_sequence"] = (
                 c["after_trimming"]
@@ -119,17 +116,27 @@ class MultiqcModule(BaseMultiqcModule):
         self.fastqc_general_stats()
 
     def parse_cutadapt(self, f):
-        """Parse cutadapt data."""
+        """Parse cutadapt data from json.
+        {
+          "read_counts": {
+            "input": 3946922,
+            "filtered": {
+              "too_short": 177599,
+              "too_long": null,
+              "too_many_n": null,
+              "too_many_expected_errors": null,
+              "casava_filtered": null,
+              "discard_trimmed": null,
+              "discard_untrimmed": null
+            },
+            "output": 58176,
+            ...
+        """
         parsed_data = dict()
-        for l in f["f"]:
-            if "Total reads processed:" in l or "Total pairs processed:" in l:
-                parsed_data["before_trimming"] = int(
-                    l.split(" ")[-1].replace(",", "")
-                )
-            elif "written (passing filters):" in l:
-                parsed_data["after_trimming"] = int(
-                    l.split(":")[-1].split("(")[0].replace(",", "")
-                )
+
+        json_data = json.load(f["f"])
+        parsed_data["before_trimming"] = json_data["read_counts"]["input"]
+        parsed_data["after_trimming"] = json_data["read_counts"]["output"]
         return parsed_data
 
     def parse_bowtie2(self, f):
