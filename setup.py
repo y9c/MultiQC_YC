@@ -17,17 +17,14 @@ setup(
     description="MultiQC plugin for interal use at yc",
     long_description=__doc__,
     keywords="bioinformatics",
-    url="https://github.com/y9c/MultiQC_yc",
+    url="https://github.com/y9c/MultiQC_readsStats",
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=["multiqc>=1.10", "pandas"],
+    install_requires=["multiqc>=1.10"],
     entry_points={
-        "multiqc.hooks.v1": [
-            "config_loaded = multiqc_yc.multiqc_yc:update_config",
-        ],
         "multiqc.modules.v1": [
-            "readsStats = multiqc_yc.modules.readsStats.readsStats:MultiqcModule",
+            "readsStats = multiqc.modules.readsStats:MultiqcModule",
         ],
         "multiqc.templates.v1": [
             "yc = multiqc_yc.templates.yc",
