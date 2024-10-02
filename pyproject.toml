@@ -2,14 +2,11 @@
 name = 'multiqc-readsStats'
 version = "0.0.1"
 description = "Multiqc test package"
-authors = { name = "Chang Y", email = "" }
+authors = [{ name = "Chang Y", email = "yech1990@gmail.com" }]
 license = { text = "MIT" }
 readme = "README.md"
 keywords = ["bioinformatics", "NGS"]
 
-[tool.black]
-line-length = 120
-target_version = ['py36','py37','py38', 'py39']
 
 [project.entry-points."multiqc.modules.v1"]
 readsStats = "multiqc.modules.readsStats:MultiqcModule"
