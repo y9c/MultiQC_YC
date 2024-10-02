@@ -1,5 +1,5 @@
 readsStats/cutadapt:
-  contents_re: r".*Cutadapt report.*'
+  contents_re: ".*Cutadapt report.*"
   num_lines: 3
   shared: False
 
