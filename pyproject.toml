@@ -10,3 +10,6 @@ keywords = ["bioinformatics", "NGS"]
 
 [project.entry-points."multiqc.modules.v1"]
 readsStats = "multiqc.modules.readsStats:MultiqcModule"
+
+[project.entry-points."multiqc.templates.v1"]
+yc = "multiqc.templates.yc"
