@@ -2,7 +2,7 @@
 name = 'multiqc-readsStats'
 version = "0.0.1"
 description = "Multiqc test package"
-authors = ["Ye Chang <yech1990@gmail.com>"]
+authors = { name = "Chang Y", email = "" }
 license = { text = "MIT" }
 readme = "README.md"
 keywords = ["bioinformatics", "NGS"]
