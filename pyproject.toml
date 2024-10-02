@@ -1,5 +1,9 @@
 [project]
 name = 'multiqc-readsStats'
+version = "0.0.1"
+authors = [
+    {name = "Chang Y"},
+]
 
 [tool.black]
 line-length = 120
