@@ -1,9 +1,11 @@
 [project]
 name = 'multiqc-readsStats'
 version = "0.0.1"
-authors = [
-    {name = "Chang Y"},
-]
+description = "Multiqc test package"
+authors = ["Ye Chang <yech1990@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+keywords = ["bioinformatics", "NGS"]
 
 [tool.black]
 line-length = 120
