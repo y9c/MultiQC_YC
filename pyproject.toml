@@ -1,3 +1,6 @@
+[project]
+name = 'multiqc-readsStats'
+
 [tool.black]
 line-length = 120
 target_version = ['py36','py37','py38', 'py39']
