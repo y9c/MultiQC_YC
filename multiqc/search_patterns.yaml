@@ -1,10 +1,10 @@
 readsStats/cutadapt:
-  contents_re: ".*Cutadapt report.*"
+  contents_re: '.*Cutadapt report.*'
   num_lines: 3
   shared: False
 
 readsStats/bowtie2:
-  contents_re: r"(.*total \(QC-passed reads \+ QC-failed reads\).*)|(.*reads; of these:.*)"
+  contents_re: '(.*total \(QC-passed reads \+ QC-failed reads\).*)|(.*reads; of these:.*)'
   fn: '*_genes.report'
   num_lines: 1
   shared: False
